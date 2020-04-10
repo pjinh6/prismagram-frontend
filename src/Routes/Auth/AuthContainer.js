@@ -6,7 +6,7 @@ import {} from 'fxjs/Lazy';
 
 import AuthPresenter from './AuthPresenter';
 import useInput from '../../Hooks/useInput';
-import { LOG_IN, CREATE_ACCOUNT } from './AuthQueries';
+import { LOG_IN, CREATE_ACCOUNT, CONFIRM_SECRET, LOCAL_LOG_IN } from './AuthQueries';
 
 export default () => {
 	const [action, setAction] = useState('logIn');
@@ -28,6 +28,15 @@ export default () => {
 			email: email.value,
 		},
 	});
+
+	const [confirmSecretMutation] = useMutation(CONFIRM_SECRET, {
+		variables: {
+			email: email.value,
+			secret: secret.value,
+		},
+	});
+
+	const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
 	const logIn = async () => {
 		try {
@@ -73,14 +82,37 @@ export default () => {
 		}
 	};
 
+	const confirm = async () => {
+		try {
+			if (!!secret.value) {
+				const { data } = await confirmSecretMutation();
+				const { confirmSecret: token } = data;
+				if (!!token) {
+					localLogInMutation({
+						variables: { token }
+					});
+				} else {
+					throw Error();
+				}
+			}
+		} catch (err) {
+			toast.error(`Can't confirm secret, check again`);
+		}
+	};
+
 
 	const onSubmit = async evt => {
 		evt.preventDefault();
 		console.log(456)
-		if (action === 'logIn') {
-			await logIn();
-		} else if (action === 'signUp') {
-			await signUp();
+		switch (action) {
+		case 'logIn':
+			return logIn();
+		case 'signUp':
+			return signUp();
+		case 'confirm':
+			return confirm();
+		default:
+			return;
 		}
 	};
 
