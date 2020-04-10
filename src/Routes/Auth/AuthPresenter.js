@@ -55,25 +55,35 @@ export default ({
 	firstName,
 	lastName,
 	email,
+	secret,
 	onSubmit,
 }) => (
 	<Wrapper>
 		<Form>
 			{
-				action === 'logIn'
-				? (
+				action === 'logIn' && (
 					<form onSubmit={ onSubmit } >
 						<Input placeholder={ 'Email' } { ...email } type="email" />
 						<Button text={ "Log In" }/>
 					</form>
 				)
-				: (
+			}
+			{
+				action === 'signUp' && (
 					<form onSubmit={ onSubmit } >
 						<Input placeholder={ 'First name' } { ...firstName } />
 						<Input placeholder={ 'Last name' } { ...lastName } />
 						<Input placeholder={ 'Email' } { ...email } type="email" />
 						<Input placeholder={ 'Username' } { ...username } />
 						<Button text={ "Sign Up" }/>
+					</form>
+				)
+			}
+			{
+				action === 'confirm' && (
+					<form onSubmit={ onSubmit } >
+						<Input placeholder={ 'Paste your secret' } { ...secret } />
+						<Button text={ "Confirm" }/>
 					</form>
 				)
 			}
