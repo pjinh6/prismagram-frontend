@@ -15,6 +15,7 @@ export default () => {
 	const lastName = useInput('');
 	const email = useInput('');
 	const secret = useInput('');
+	const [inProgress, setInProgress] = useState(false);
 	
 	const [requestSecretMutation] = useMutation(LOG_IN, {
 		variables: { email: email.value },
@@ -38,8 +39,8 @@ export default () => {
 
 	const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
-	const logIn = async email => await goS(
-		email,
+	const logIn = async () => await goS(
+		email.value,
 		a => !a ? (toast.error(`Email is required`), stop) : '',
 		async _ => {
 			try {
@@ -103,17 +104,21 @@ export default () => {
 
 	const onSubmit = async evt => {
 		evt.preventDefault();
+		if (inProgress) return;
+		setInProgress(true);
 		switch (action) {
 		case 'logIn':
-			console.log(123123)
-			return logIn(email.value);
+			await logIn();
+			break; 
 		case 'signUp':
-			return signUp();
+			await signUp();
+			break; 
 		case 'confirm':
-			return confirm();
+			await confirm();
+			break; 
 		default:
-			return;
 		}
+		setInProgress(false);
 	};
 
 	return (
