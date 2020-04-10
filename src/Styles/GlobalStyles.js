@@ -4,7 +4,7 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
-const getThemeVal = key => ({ theme }) => theme[key];
+import { getThemeVal } from '../Helper/util';
 
 export default createGlobalStyle`
 	${ reset };

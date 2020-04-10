@@ -1,0 +1,1 @@
+export const getThemeVal = key => ({ theme }) => theme[key];
