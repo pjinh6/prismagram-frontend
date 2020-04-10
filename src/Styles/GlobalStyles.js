@@ -22,4 +22,7 @@ export default createGlobalStyle`
 		color: ${ getThemeVal('blueColor') };
 		text-decoration: none;
 	}
+	input: focus {
+		outline: none;
+	}
 `;
