@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import { toast } from 'react-toastify';
-import { delay } from 'fxjs/Strict';
-import {} from 'fxjs/Lazy';
+import { delay, goS, stop } from 'fxjs/Strict';
+import {  } from 'fxjs/Lazy';
 
 import AuthPresenter from './AuthPresenter';
 import useInput from '../../Hooks/useInput';
@@ -38,63 +38,63 @@ export default () => {
 
 	const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
-	const logIn = async () => {
-		try {
-			if (!email.value) {
-				toast.error(`Email is required`);
-			} else {
+	const logIn = async email => await goS(
+		email,
+		a => !a ? (toast.error(`Email is required`), stop) : '',
+		async _ => {
+			try {
 				const { data: { requestSecret } } = await requestSecretMutation();
-				if (!requestSecret) {
-					toast.error(`You don't have an account yet, create one`);
-					await delay(3000);
-					setAction('signUp');
-				} else {
-					toast.success(`Check your inbox for your login secret`);
-					setAction('confirm');
-				}
+				return requestSecret;
+			} catch (err) {
+				toast.error(`Can't request secret, try again`);
+				return stop();
 			}
-		} catch (err) {
-			toast.error(`Can't request secret, try again`);
-		}
-	};
+		},
+		async requestSecret => {
+			if (!requestSecret) {
+				toast.error(`You don't have an account yet, create one`);
+				await delay(3000);
+				return setAction('signUp');
+			}
+			toast.success(`Check your inbox for your login secret`);
+			setAction('confirm');
+		},
+	);
 
-	const signUp = async () => {
-		try {
-			if (
-				!!username.value
-				&& !!firstName.value
-				&& !!lastName.value
-				&& !!email.value
-			) {
+	const signUp = async () => goS(
+		'',
+		_ => !username.value
+			|| !firstName.value
+			|| !lastName.value
+			|| !email.value
+			? (toast.error(`All field are required`), stop)
+			: '',
+		async _ => {
+			try {
 				const { data: { createAccount } } = await createAccountMutation();
-				if (!createAccount) {
-					toast.error(`Can't create account`);
-				} else {
-					toast.success(`Account created! Log in now`);
-					await delay(3000);
-					setAction('logIn');
-				}
-			} else {
-				toast.error(`All field are required`);
+				return createAccount;
+			} catch (err) {
+				toast.error(err.message);
+				return stop();
 			}
-		} catch (err) {
-			toast.error(err.message);
-		}
-	};
+		},
+		async createAccount => {
+			if (!createAccount) return toast.error(`Can't create account`);
+			toast.success(`Account created! Log in now`);
+			await delay(3000);
+			setAction('logIn');
+		},
+	);
 
 	const confirm = async () => {
 		try {
-			if (!!secret.value) {
-				const { data } = await confirmSecretMutation();
-				const { confirmSecret: token } = data;
-				if (!!token) {
-					localLogInMutation({
-						variables: { token }
-					});
-				} else {
-					throw Error();
-				}
-			}
+			if (!secret.value) return;
+			const { data } = await confirmSecretMutation();
+			const { confirmSecret: token } = data;
+			if (!token) throw Error();
+			localLogInMutation({
+				variables: { token }
+			});
 		} catch (err) {
 			toast.error(`Can't confirm secret, check again`);
 		}
@@ -103,10 +103,10 @@ export default () => {
 
 	const onSubmit = async evt => {
 		evt.preventDefault();
-		console.log(456)
 		switch (action) {
 		case 'logIn':
-			return logIn();
+			console.log(123123)
+			return logIn(email.value);
 		case 'signUp':
 			return signUp();
 		case 'confirm':
