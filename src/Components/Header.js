@@ -62,11 +62,11 @@ const HeaderLink = styled(Link)`
 `;
 
 const ME = gql`
-	{
-		me {
-			username
-		}
+{
+	me {
+		username
 	}
+}
 `;
 
 export default withRouter(({ history }) => {
