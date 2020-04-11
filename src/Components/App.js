@@ -9,7 +9,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import GlobalStyles from '../Styles/GlobalStyles';
 import Theme from '../Styles/Theme';
 import { getThemeVal } from '../Helper/util';
-import Routes from './Router';
+import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -38,7 +38,7 @@ export default () => {
 					<>
 						<Header />
 						<Wrapper>
-							<Router isLoggedIn={ isLoggedIn } />
+							<Routes isLoggedIn={ isLoggedIn } />
 							<Footer />
 						</Wrapper>
 					</>
