@@ -1,4 +1,5 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
 import { getThemeVal } from '../../Helper/util';
@@ -62,29 +63,44 @@ export default ({
 		<Form>
 			{
 				action === 'logIn' && (
-					<form onSubmit={ onSubmit } >
-						<Input placeholder={ 'Email' } { ...email } type="email" />
-						<Button text={ "Log In" }/>
-					</form>
+					<>
+						<Helmet>
+							<title>Log In | Prismagram</title>
+						</Helmet>
+						<form onSubmit={ onSubmit } >
+							<Input placeholder={ 'Email' } { ...email } type="email" />
+							<Button text={ "Log In" }/>
+						</form>
+					</>
 				)
 			}
 			{
 				action === 'signUp' && (
-					<form onSubmit={ onSubmit } >
-						<Input placeholder={ 'First name' } { ...firstName } />
-						<Input placeholder={ 'Last name' } { ...lastName } />
-						<Input placeholder={ 'Email' } { ...email } type="email" />
-						<Input placeholder={ 'Username' } { ...username } />
-						<Button text={ "Sign Up" }/>
-					</form>
+					<>
+						<Helmet>
+							<title>Sign Up | Prismagram</title>
+						</Helmet>
+						<form onSubmit={ onSubmit } >
+							<Input placeholder={ 'First name' } { ...firstName } />
+							<Input placeholder={ 'Last name' } { ...lastName } />
+							<Input placeholder={ 'Email' } { ...email } type="email" />
+							<Input placeholder={ 'Username' } { ...username } />
+							<Button text={ "Sign Up" }/>
+						</form>
+					</>
 				)
 			}
 			{
 				action === 'confirm' && (
-					<form onSubmit={ onSubmit } >
-						<Input placeholder={ 'Paste your secret' } { ...secret } />
-						<Button text={ "Confirm" }/>
-					</form>
+					<>
+						<Helmet>
+							<title>Confirm Secret | Prismagram</title>
+						</Helmet>
+						<form onSubmit={ onSubmit } >
+							<Input placeholder={ 'Paste your secret' } { ...secret } />
+							<Button text={ "Confirm" }/>
+						</form>
+					</>
 				)
 			}
 		</Form>
