@@ -6,5 +6,5 @@ export default (defaultValue) => {
 		const { target: { value } } = evt;
 		setValue(value);
 	};
-	return { value, onChange };
+	return { value, onChange, setValue };
 };

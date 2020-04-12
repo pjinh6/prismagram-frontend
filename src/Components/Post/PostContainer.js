@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import PostPresenter from './PostPresenter';
 import useInput from '../../Hooks/useInput';
-import { useMutation } from 'react-apollo-hooks';
 import { TOGGLE_LIKE, ADD_COMMENT } from './PostQueries';
+import { ME } from '../../SharedQueries';
 import { toast } from 'react-toastify';
 
 const PostContainer = ({
@@ -21,11 +22,13 @@ const PostContainer = ({
 	const [likeCountInState, setLikeCount] = useState(likeCount);
 	const [isLikedInState, setIsLiked] = useState(isLiked);
 	const [currentItem, setCurrentItem] = useState(0);
+	const [selfComments, setSelfComments] = useState([]);
 	const comment = useInput('');
+	const { data: meQuery } = useQuery(ME);
 	const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, {
 		variables: { postId: id }
 	});
-	const [addComment] = useMutation(ADD_COMMENT, {
+	const [addCommentMutation] = useMutation(ADD_COMMENT, {
 		variables: {
 			postId: id,
 			text: comment.value
@@ -52,6 +55,21 @@ const PostContainer = ({
 		toggleLikeMutation();
 	};
 
+	const onKeyPress = async evt => {
+		const { which } = evt;
+		if (which === 13) {
+			evt.preventDefault();
+			try {
+				const { data: { addComment }} = await addCommentMutation();
+				setSelfComments([...selfComments, addComment]);
+				comment.setValue('');
+			} catch (err) {
+				toast.error(`Can't send comment`);
+			}
+			
+		}
+	};
+
 	return (
 		<PostPresenter
 			location={ location }
@@ -61,12 +79,14 @@ const PostContainer = ({
 			likeCount={ likeCountInState }
 			isLiked={ isLikedInState }
 			comments={ comments }
+			selfComments={ selfComments }
 			createdAt={ createdAt }
 			newComment={ comment }
 			setLikeCount={ setLikeCount }
 			setIsLiked={ setIsLiked }
 			currentItem={ currentItem }
 			toggleLike={ toggleLike }
+			onKeyPress={ onKeyPress }
 		/>
 	);
 };

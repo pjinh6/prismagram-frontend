@@ -1,14 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
-import { go, takeAll } from 'fxjs/Strict';
-import { map } from 'fxjs/Lazy';
+import { go, range, map } from 'fxjs/Strict';
 
 import { getThemeVal } from '../../Helper/util';
 import FatText from '../FatText';
 import Avatar from '../Avatar';
-import { HeartFull, HeartEmpty, Comment } from '../Icons';
-import { range } from 'fxjs';
+import { HeartFull, HeartEmpty, Comment as CommentIcon } from '../Icons';
 
 const Post = styled.div`
 	${ getThemeVal('whiteBox') }
@@ -90,6 +88,17 @@ const Textarea = styled(TextareaAutosize)`
 	}
 `;
 
+const Comments = styled.ul`
+	margin-top: 10px;
+`;
+
+const Comment = styled.li`
+	margin-bottom: 7px;
+	span {
+		margin-right: 5px;
+	}
+`;
+
 export default ({
 	user: { username, avatar },
 	location,
@@ -100,6 +109,9 @@ export default ({
 	newComment,
 	currentItem,
 	toggleLike,
+	onKeyPress,
+	comments,
+	selfComments,
 }) => (
 	<Post>
 		<Header>
@@ -116,8 +128,7 @@ export default ({
 					map(idx => {
 						const { id, url } = files[idx];
 						return (<File key={ id } id={ id } src={ url } showing={ idx === currentItem }/>);
-					}),
-					takeAll
+					})
 				)
 			}
 		</Files>
@@ -127,7 +138,7 @@ export default ({
 					{ isLiked ? <HeartFull /> : <HeartEmpty /> }
 				</Button>
 				<Button>
-					<Comment />
+					<CommentIcon />
 				</Button>
 			</Buttons>
 			<FatText
@@ -137,8 +148,39 @@ export default ({
 					: `${ likeCount } likes`
 				}
 			/>
+			{
+				comments && (<Comments>
+					{
+						map(comment => (
+							<Comment key={comment.id}>
+								<FatText text={ comment.user.username } />
+								{ comment.text }
+							</Comment>
+						), comments)
+					}
+				</Comments>)
+			}
+			{
+				selfComments && (<Comments>
+					{
+						map(comment => (
+							<Comment key={comment.id}>
+								<FatText text={ comment.user.username } />
+								{ comment.text }
+							</Comment>
+						), selfComments)
+					}
+				</Comments>)
+			}
 			<Timestamp>{ createdAt }</Timestamp>
-			<Textarea placeholder="Add a comment..." { ...newComment } />
+			<form>
+				<Textarea
+					placeholder="Add a comment..."
+					value={ newComment.value }
+					onChange={ newComment.onChange }
+					onKeyPress={ onKeyPress }
+				/>
+			</form>
 		</Meta>
 	</Post>
 );

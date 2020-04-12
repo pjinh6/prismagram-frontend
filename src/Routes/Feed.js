@@ -3,8 +3,7 @@ import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
-import { go, takeAll } from 'fxjs/Strict';
-import { map } from 'fxjs/Lazy';
+import { map } from 'fxjs/Strict';
 
 import Loader from '../Components/Loader';
 import Post from '../Components/Post';
@@ -58,24 +57,20 @@ export default () => {
 				!loading
 				&& !!data
 				&& !!data.seeFeed
-				&& go(
-					data.seeFeed,
-					map(post => (
-						<Post
-							key={ post.id }
-							id={ post.id }
-							location={ post.location }
-							caption={ post.caption }
-							user={ post.user }
-							files={ post.files }
-							likeCount={ post.likeCount }
-							isLiked={ post.isLiked }
-							comments={ post.comments }
-							createdAt={ post.createdAt }
-						/>
-					)),
-					takeAll
-				)
+				&& map(post => (
+					<Post
+						key={ post.id }
+						id={ post.id }
+						location={ post.location }
+						caption={ post.caption }
+						user={ post.user }
+						files={ post.files }
+						likeCount={ post.likeCount }
+						isLiked={ post.isLiked }
+						comments={ post.comments }
+						createdAt={ post.createdAt }
+					/>
+				), data.seeFeed)
 			}
 		</Wrapper>
 	);
