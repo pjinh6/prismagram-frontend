@@ -8,6 +8,7 @@ import Feed from '../Routes/Feed';
 import Explore from '../Routes/Explore';
 import Profile from '../Routes/Profile';
 import Search from '../Routes/Search';
+import Post from '../Routes/Post';
 
 /**
  * Profile이 Explore보다 앞에 있으면 /explore로 가는 사람들은
@@ -18,7 +19,8 @@ const LoggedInRoutes = () => (
 		<Route exact path="/" component={ Feed } />
 		<Route exact path="/explore" component={ Explore } />
 		<Route exact path="/search" component={ Search } />
-		<Route exact path="/:username" component={ Profile } />
+		<Route exact path="/user/:username" component={ Profile } />
+		<Route exact path="/post/:postId" component={ Post } />
 	</Switch>
 );
 

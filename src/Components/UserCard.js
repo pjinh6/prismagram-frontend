@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { getThemeVal } from '../Helper/util';
 import Avatar from './Avatar';
 import FatText from './FatText';
-import Button from './Button';
+import FollowButton from './FollowButton';
 import { Link } from 'react-router-dom';
 
 const Card = styled.div`
@@ -26,6 +26,7 @@ const ExtLink = styled(Link)`
 `;
 
 const UserCard = ({
+	id,
 	username,
 	isFollowing,
 	url,
@@ -33,17 +34,18 @@ const UserCard = ({
 }) => (
 	<Card>
 		<ExtAvatar url={ url } size={ 'md' }/>
-		<ExtLink to={ `/${ username }` }>
+		<ExtLink to={ `/user/${ username }` }>
 			<FatText text={ username } />
 		</ExtLink>
 		{
 			!isSelf
-			&& <Button text={ isFollowing ? 'UnFollow' : 'Follow' } />
+			&& <FollowButton id={ id } isFollowing={ isFollowing } />
 		}
 	</Card>
 );
 
 UserCard.propTypes = {
+	id: PropTypes.string.isRequired,
 	username: PropTypes.string.isRequired,
 	isFollowing: PropTypes.bool.isRequired,
 	url: PropTypes.string.isRequired,
