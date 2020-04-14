@@ -52,7 +52,7 @@ const SquarePost = ({
 	file
 }) => (
 	<Container bg={ file }>
-		<Link to={ `/post/${ id }` }>
+		<Link to={ `/p/${ id }` }>
 			<Overlay>
 				<Count>
 					<HeartFull />

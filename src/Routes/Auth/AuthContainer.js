@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import { toast } from 'react-toastify';
 import { delay, goS, stop } from 'fxjs/Strict';
-import {  } from 'fxjs/Lazy';
 
 import AuthPresenter from './AuthPresenter';
 import useInput from '../../Hooks/useInput';

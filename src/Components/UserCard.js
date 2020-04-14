@@ -34,7 +34,7 @@ const UserCard = ({
 }) => (
 	<Card>
 		<ExtAvatar url={ url } size={ 'md' }/>
-		<ExtLink to={ `/user/${ username }` }>
+		<ExtLink to={ `/u/${ username }` }>
 			<FatText text={ username } />
 		</ExtLink>
 		{

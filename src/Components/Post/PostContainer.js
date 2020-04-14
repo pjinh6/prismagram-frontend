@@ -47,6 +47,9 @@ const PostContainer = ({
 	};
 	useEffect(() => {
 		slide();
+		return () => {
+
+		};
 	}, [currentItem]);
 
 	const toggleLike = () => {
