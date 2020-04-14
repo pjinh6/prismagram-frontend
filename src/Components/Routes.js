@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // Switch는 딱 하나의 라우트만 렌더링해준다.
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Auth from '../Routes/Auth';
 import Feed from '../Routes/Feed';
@@ -21,12 +21,14 @@ const LoggedInRoutes = () => (
 		<Route exact path="/search" component={ Search } />
 		<Route exact path="/u/:username" component={ Profile } />
 		<Route exact path="/p/:postId" component={ Post } />
+		<Redirect from="*" to="/" />
 	</Switch>
 );
 
 const LoggedOutRoutes = () => (
 	<Switch>
 		<Route exact path="/" component={ Auth } />
+		<Redirect from="*" to="/" />
 	</Switch>
 );
 
